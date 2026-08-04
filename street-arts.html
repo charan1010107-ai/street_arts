@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Arts Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt:#141414;
+    --concrete:#232323;
+    --paper:#eeece3;
+    --magenta:#ff2e63;
+    --cyan:#08d9d6;
+    --yellow:#f7d716;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--asphalt);
+    color:var(--paper);
+    font-family:'Space Grotesk',sans-serif;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03) 0, transparent 40%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .noise{
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:1;
+    mix-blend-mode:overlay;
+  }
+  header{
+    position:sticky;top:0;
+    z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:20px 6vw;
+    background:rgba(20,20,20,0.85);
+    backdrop-filter:blur(6px);
+    border-bottom:2px solid var(--concrete);
+  }
+  .logo{
+    font-family:'Bungee',cursive;
+    font-size:1.3rem;
+    letter-spacing:1px;
+    color:var(--paper);
+  }
+  .logo span{color:var(--magenta);}
+  nav a{
+    color:var(--paper);
+    text-decoration:none;
+    font-family:'Space Mono',monospace;
+    font-size:0.85rem;
+    margin-left:28px;
+    letter-spacing:0.5px;
+    opacity:0.85;
+    transition:opacity 0.2s, color 0.2s;
+  }
+  nav a:hover{opacity:1;color:var(--cyan);}
+  .cta-nav{
+    border:2px solid var(--yellow);
+    padding:8px 16px;
+    color:var(--yellow) !important;
+    border-radius:2px;
+  }
+  .cta-nav:hover{background:var(--yellow);color:var(--asphalt) !important;}
+
+  /* HERO */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:0 6vw;
+    z-index:2;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    color:var(--cyan);
+    font-size:0.85rem;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  .hero h1{
+    font-family:'Bungee',cursive;
+    font-size:clamp(2.8rem,9vw,7rem);
+    line-height:0.95;
+    text-transform:uppercase;
+    color:var(--paper);
+    text-shadow:
+      4px 4px 0 var(--magenta),
+      8px 8px 0 var(--cyan);
+    letter-spacing:1px;
+    max-width:14ch;
+  }
+  .hero p{
+    margin-top:28px;
+    max-width:520px;
+    font-size:1.1rem;
+    line-height:1.6;
+    color:#c9c7bd;
+  }
+  .hero-btns{
+    margin-top:40px;
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    font-family:'Space Mono',monospace;
+    background:var(--magenta);
+    color:var(--asphalt);
+    border:none;
+    padding:16px 32px;
+    font-size:0.95rem;
+    font-weight:700;
+    letter-spacing:0.5px;
+    text-decoration:none;
+    cursor:pointer;
+    position:relative;
+    transition:transform 0.15s;
+    display:inline-block;
+  }
+  .btn-primary:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--cyan);}
+  .btn-ghost{
+    font-family:'Space Mono',monospace;
+    background:transparent;
+    color:var(--paper);
+    border:2px solid var(--paper);
+    padding:14px 30px;
+    font-size:0.95rem;
+    text-decoration:none;
+    transition:all 0.15s;
+  }
+  .btn-ghost:hover{border-color:var(--yellow);color:var(--yellow);}
+
+  .tape{
+    position:absolute;
+    background:var(--yellow);
+    color:var(--asphalt);
+    font-family:'Space Mono',monospace;
+    font-size:0.7rem;
+    font-weight:700;
+    letter-spacing:2px;
+    padding:6px 20px;
+    transform:rotate(-4deg);
+    box-shadow:2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .tape.t1{top:14%;right:8%;transform:rotate(6deg);}
+
+  section{position:relative;z-index:2;padding:110px 6vw;}
+  .section-label{
+    font-family:'Space Mono',monospace;
+    color:var(--magenta);
+    font-size:0.85rem;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  h2{
+    font-family:'Bungee',cursive;
+    font-size:clamp(2rem,4.5vw,3.2rem);
+    text-transform:uppercase;
+    margin-bottom:50px;
+    max-width:16ch;
+  }
+
+  /* WALL OF DISCIPLINES */
+  .wall{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:24px;
+  }
+  .tag-card{
+    background:var(--concrete);
+    border:2px solid #3a3a3a;
+    padding:28px 24px;
+    position:relative;
+    transition:transform 0.2s, border-color 0.2s;
+  }
+  .tag-card:nth-child(1){border-top:5px solid var(--magenta);}
+  .tag-card:nth-child(2){border-top:5px solid var(--cyan);}
+  .tag-card:nth-child(3){border-top:5px solid var(--yellow);}
+  .tag-card:nth-child(4){border-top:5px solid var(--paper);}
+  .tag-card:hover{transform:translateY(-6px);}
+  .tag-card .num{
+    font-family:'Space Mono',monospace;
+    color:#666;
+    font-size:0.8rem;
+  }
+  .tag-card h3{
+    font-family:'Bungee',cursive;
+    font-size:1.3rem;
+    margin:14px 0 12px;
+    text-transform:uppercase;
+  }
+  .tag-card p{
+    color:#b8b6ac;
+    font-size:0.92rem;
+    line-height:1.55;
+  }
+
+  /* ABOUT STRIP */
+  .about{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+  }
+  .about-stat{
+    display:flex;
+    gap:36px;
+    margin-top:36px;
+    flex-wrap:wrap;
+  }
+  .stat b{
+    font-family:'Bungee',cursive;
+    font-size:2.4rem;
+    display:block;
+    color:var(--cyan);
+  }
+  .stat span{
+    font-family:'Space Mono',monospace;
+    font-size:0.78rem;
+    color:#999;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .about-visual{
+    aspect-ratio:1/1;
+    background:
+      repeating-linear-gradient(45deg, var(--concrete) 0 18px, #202020 18px 36px);
+    border:2px solid #3a3a3a;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .about-visual span{
+    font-family:'Bungee',cursive;
+    font-size:clamp(2rem,4vw,3.5rem);
+    color:var(--magenta);
+    text-shadow:5px 5px 0 var(--cyan);
+    transform:rotate(-6deg);
+    text-align:center;
+  }
+
+  /* FORM */
+  .join-wrap{
+    display:flex;
+    justify-content:center;
+  }
+  .join-card{
+    width:100%;
+    max-width:620px;
+    background:var(--concrete);
+    border:2px solid #3a3a3a;
+    padding:44px;
+    position:relative;
+  }
+  .join-card::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:-10px;
+    height:10px;
+    background:
+      radial-gradient(circle at 10% 0, var(--magenta) 4px, transparent 5px),
+      radial-gradient(circle at 30% 0, var(--cyan) 3px, transparent 4px),
+      radial-gradient(circle at 55% 0, var(--yellow) 5px, transparent 6px),
+      radial-gradient(circle at 75% 0, var(--magenta) 3px, transparent 4px),
+      radial-gradient(circle at 92% 0, var(--cyan) 4px, transparent 5px);
+  }
+  .field{margin-bottom:22px;}
+  label{
+    display:block;
+    font-family:'Space Mono',monospace;
+    font-size:0.78rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--yellow);
+    margin-bottom:8px;
+  }
+  input, select, textarea{
+    width:100%;
+    background:var(--asphalt);
+    border:2px solid #3a3a3a;
+    color:var(--paper);
+    padding:13px 14px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:0.98rem;
+    border-radius:2px;
+    transition:border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--cyan);
+  }
+  textarea{resize:vertical;min-height:90px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .submit-btn{
+    width:100%;
+    margin-top:10px;
+    background:var(--magenta);
+    color:var(--asphalt);
+    border:none;
+    padding:17px;
+    font-family:'Bungee',cursive;
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .submit-btn:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--cyan);}
+  .submit-btn:active{transform:translate(0,0);box-shadow:none;}
+  .form-note{
+    font-family:'Space Mono',monospace;
+    font-size:0.75rem;
+    color:#777;
+    margin-top:16px;
+    text-align:center;
+  }
+  #formMsg{
+    margin-top:16px;
+    font-family:'Space Mono',monospace;
+    font-size:0.85rem;
+    text-align:center;
+    display:none;
+    padding:12px;
+    border-radius:2px;
+  }
+  #formMsg.ok{display:block;background:rgba(8,217,214,0.12);color:var(--cyan);border:1px solid var(--cyan);}
+  #formMsg.err{display:block;background:rgba(255,46,99,0.12);color:var(--magenta);border:1px solid var(--magenta);}
+
+  footer{
+    padding:40px 6vw;
+    text-align:center;
+    font-family:'Space Mono',monospace;
+    font-size:0.78rem;
+    color:#666;
+    border-top:2px solid var(--concrete);
+    position:relative;z-index:2;
+  }
+
+  @media(max-width:760px){
+    .about{grid-template-columns:1fr;}
+    .row2{grid-template-columns:1fr;}
+    nav a{margin-left:14px;font-size:0.75rem;}
+    .tape.t1{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<header>
+  <div class="logo">STREET<span>ARTS</span></div>
+  <nav>
+    <a href="#disciplines">Crew</a>
+    <a href="#about">About</a>
+    <a href="#join" class="cta-nav">Join</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">// est. on concrete, built on culture</div>
+  <h1>Street Arts Club</h1>
+  <p>Graffiti, breaking, freestyle, and mural work — we take the wall, the floor, and the mic seriously. No experience needed, just show up ready to make something.</p>
+  <div class="hero-btns">
+    <a href="#join" class="btn-primary">Join the Crew</a>
+    <a href="#disciplines" class="btn-ghost">See What We Do</a>
+  </div>
+  <div class="tape t1">OPEN CALL</div>
+</section>
+
+<section id="disciplines">
+  <div class="section-label">What we run</div>
+  <h2>Four walls, one crew</h2>
+  <div class="wall">
+    <div class="tag-card">
+      <div class="num">01</div>
+      <h3>Graffiti &amp; Mural</h3>
+      <p>Cans, caps, and sketchbooks. Weekly sessions on legal walls, plus letterform and character workshops.</p>
+    </div>
+    <div class="tag-card">
+      <div class="num">02</div>
+      <h3>Breaking &amp; Street Dance</h3>
+      <p>Footwork, power moves, and cyphers. Open floor practice every week, battle prep before events.</p>
+    </div>
+    <div class="tag-card">
+      <div class="num">03</div>
+      <h3>Freestyle &amp; Spoken Word</h3>
+      <p>Cyphers, open mic nights, and writing sessions for anyone who wants to put bars or verses together.</p>
+    </div>
+    <div class="tag-card">
+      <div class="num">04</div>
+      <h3>Live Art &amp; Events</h3>
+      <p>Campus fests, live-paint battles, and pop-up walls — where all four disciplines share one stage.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about">
+    <div>
+      <div class="section-label">Why join</div>
+      <h2>Made by students who couldn't find a wall</h2>
+      <p style="color:#b8b6ac;line-height:1.7;max-width:48ch;">Street Arts Club started as a handful of people practicing in a parking lot. Now it's a full crew across four disciplines, open to any student — first-timers included. Bring your own style, we'll bring the space.</p>
+      <div class="about-stat">
+        <div class="stat"><b>120+</b><span>active members</span></div>
+        <div class="stat"><b>4</b><span>core disciplines</span></div>
+        <div class="stat"><b>2/wk</b><span>open sessions</span></div>
+      </div>
+    </div>
+    <div class="about-visual"><span>EST.<br>ON THE<br>STREET</span></div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="section-label">Registration</div>
+  <h2>Put your name on the wall</h2>
+  <div class="join-wrap">
+    <div class="join-card">
+      <form id="joinForm" action="https://formsubmit.co/jakkasririshithareddy@gmail.com" method="POST">
+        <!-- FormSubmit config -->
+        <input type="hidden" name="_subject" value="New Street Arts Club Registration">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none">
+
+        <div class="row2">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="Name" required placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="roll">Roll no. / ID</label>
+            <input type="text" id="roll" name="Roll Number" placeholder="e.g. 24IT045">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="Email" required placeholder="you@college.edu">
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="Phone" required placeholder="10-digit number">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="discipline">Discipline you want to join</label>
+          <select id="discipline" name="Discipline" required>
+            <option value="" disabled selected>Choose one</option>
+            <option>Graffiti & Mural</option>
+            <option>Breaking & Street Dance</option>
+            <option>Freestyle & Spoken Word</option>
+            <option>Live Art & Events</option>
+            <option>Not sure yet — surprise me</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="exp">Experience level</label>
+          <select id="exp" name="Experience Level" required>
+            <option value="" disabled selected>Choose one</option>
+            <option>Complete beginner</option>
+            <option>Some experience</option>
+            <option>Been doing this a while</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="msg">Anything you want us to know?</label>
+          <textarea id="msg" name="Message" placeholder="Optional — portfolio link, availability, questions..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Registration</button>
+        <div id="formMsg"></div>
+        <p class="form-note">Submitting sends your details straight to the club's inbox. We'll reply within a few days.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  STREET ARTS CLUB — built on walls, floors, and open mics.
+</footer>
+
+<script>
+  const form = document.getElementById('joinForm');
+  const msgBox = document.getElementById('formMsg');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    msgBox.className = '';
+    msgBox.style.display = 'none';
+
+    try{
+      const formData = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if(res.ok){
+        msgBox.textContent = "You're in. Your registration has been sent — check your email for confirmation.";
+        msgBox.className = 'ok';
+        form.reset();
+      } else {
+        throw new Error('Send failed');
+      }
+    } catch(err){
+      msgBox.textContent = "Something went wrong sending your registration. Please try again in a moment.";
+      msgBox.className = 'err';
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      msgBox.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
